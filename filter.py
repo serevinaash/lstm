@@ -1,20 +1,20 @@
 import pandas as pd
 
-# Path ke transcript
-transcripts_path = 'C:\\kuliah\\lstm\\transcripts.tsv'
-dataset_path = 'C:\\kuliah\\lstm\\ghamadi'  # Sesuaikan dengan path dataset Anda
+# Ganti path ini dengan path file yang benar
+file_path = 'C:/lstm/transcripts.tsv'
+output_path = 'C:/lstm/filter_transcripts.tsv'
 
-# Load transcripts
-try:
-    transcripts = pd.read_csv(transcripts_path, sep='\t')
-except FileNotFoundError:
-    print(f"File not found: {transcripts_path}")
-    exit(1)
+# Membaca file TSV ke dalam DataFrame
+df = pd.read_csv(file_path, sep='\t')
 
-# Replace placeholder with actual dataset paths in transcripts
-transcripts['PATH'] = transcripts['PATH'].str.replace('${DATASET_PATH}', dataset_path)
+# Menampilkan beberapa baris pertama untuk memastikan data telah terbaca dengan benar
+print(df.head())
 
-# Simpan kembali file transcript yang telah diubah
-transcripts.to_csv(transcripts_path, sep='\t', index=False)
+# Memfilter transkrip yang path-nya dimulai dengan path yang diberikan
+dataset_path = 'C:\\lstm\\audio_data'
+filtered_df = df[df['PATH'].str.startswith(dataset_path)]
 
-print("Transcripts berhasil diupdate dengan paths yang benar.")
+# Menyimpan hasil filter ke file baru
+filtered_df.to_csv(output_path, sep='\t', index=False)
+
+print(f'Hasil filter disimpan ke {output_path}')

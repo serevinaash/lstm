@@ -3,7 +3,7 @@ from sklearn.preprocessing import LabelEncoder
 import pickle
 
 # Path ke file transkrip Anda
-transcripts_path = 'C:\\kuliah\\lstm\\transcripts.tsv'
+transcripts_path = 'C:\\lstm\\filter_transcripts.tsv'
 
 # Membaca data transkrip
 transcripts = pd.read_csv(transcripts_path, sep='\t')
