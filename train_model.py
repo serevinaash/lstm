@@ -38,7 +38,9 @@ def extract_features(file_path, augment=False):
     try:
         audio, sr = librosa.load(file_path, sr=None)
         if audio is None:
-            raise ValueError(f"Empty audio file: {file_path}")
+            raise ValueError(f"Empty audio file or unsupported format: {file_path}")
+        if len(audio) == 0:
+            raise ValueError(f"Empty audio data: {file_path}")
     except Exception as e:
         print(f"Error loading {file_path}: {e}")
         return None
@@ -55,7 +57,13 @@ def extract_features(file_path, augment=False):
         mfccs = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=13)
         delta_mfccs = librosa.feature.delta(mfccs)
         combined = np.concatenate((mfccs, delta_mfccs), axis=0)
-        return combined.T
+        
+        # Ensure the shape is valid
+        if combined.T.shape[0] > 0:
+            return combined.T
+        else:
+            raise ValueError(f"No features extracted from {file_path}. Check audio quality or extraction parameters.")
+    
     except Exception as e:
         print(f"Error extracting features from {file_path}: {e}")
         return None

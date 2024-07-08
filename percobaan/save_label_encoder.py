@@ -1,20 +1,24 @@
-import pandas as pd
+import json
 from sklearn.preprocessing import LabelEncoder
+from tensorflow.keras.utils import to_categorical
 import pickle
 
-# Path ke file transkrip Anda
-transcripts_path = 'C:\\lstm\\filter_transcripts.tsv'
+# Membaca file JSON
+with open('C:\\lstm\\all_ayat.json', 'r', encoding='utf-8') as f:
+    ayat_json = json.load(f)
 
-# Membaca data transkrip
-transcripts = pd.read_csv(transcripts_path, sep='\t')
+# Ekstrak label (teks ayat) dari struktur JSON
+labels = [ayat['text'] for ayat in ayat_json['tafsir'].values()]
 
-# Membuat LabelEncoder dan fit dengan data transkrip
+# Encode labels as integers
 label_encoder = LabelEncoder()
-labels = transcripts['TRANSCRIPT']
-label_encoder.fit(labels)
+integer_encoded = label_encoder.fit_transform(labels)
 
-# Menyimpan LabelEncoder ke dalam file
-with open('label_encoder.pkl', 'wb') as le_file:
-    pickle.dump(label_encoder, le_file)
+# One-hot encode the integer labels
+onehot_encoded = to_categorical(integer_encoded)
 
-print("Label encoder berhasil dibuat dan disimpan.")
+# Simpan LabelEncoder untuk digunakan nanti
+with open('C:\\lstm\\label_encoder.pkl', 'wb') as file:
+    pickle.dump(label_encoder, file)
+
+print("Label encoding selesai dan disimpan.")

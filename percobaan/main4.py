@@ -14,11 +14,11 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLRO
 
 # Define the dataset paths
 dataset_paths = [
-    'C:\\kuliah\\lstm\\Quran_Ayat_public\\audio_data\\Ghamadi_40kbps'
+    'C:\\lstm\\audio_data\\audio_data_40kbps'
 ]
 
 # Load transcripts
-transcripts_path = 'C:\\kuliah\\lstm\\transcripts.tsv'
+transcripts_path = 'C:\\lstm\\transcripts.tsv'
 transcripts = pd.read_csv(transcripts_path, sep='\t')
 
 # Replace placeholder with actual path in transcripts
@@ -78,8 +78,7 @@ for audio_file, transcript in zip(transcripts['PATH'], transcripts['TRANSCRIPT']
 max_seq_length = max([feature.shape[0] for feature in features])
 padded_features = pad_sequences(features, maxlen=max_seq_length, padding='post', dtype='float32')
 
-# Normalize features
-padded_features = (padded_features - np.mean(padded_features, axis=0)) \\ np.std(padded_features, axis=0)
+train_model.py
 
 # Encode labels as integers
 label_encoder = LabelEncoder()

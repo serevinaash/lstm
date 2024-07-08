@@ -12,19 +12,19 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 
 # Define the dataset path
-dataset_path = 'C:\\kuliah\\lstm\\Quran_Ayat_public\\audio_data\\Ghamadi_40kbps'
+dataset_path = 'C:\\lstm\\audio_data\\audio_data_40kbps'
 
 # Load transcripts
-transcripts_path = 'C:\\kuliah\\lstm\\transcripts.tsv'
+transcripts_path = 'C:\\lstm\\transcripts.tsv'
 transcripts = pd.read_csv(transcripts_path, sep='\t')
 
 # Load additional data from JSON
-json_path = 'C:\\kuliah\\lstm\\all_ayat.json'
+json_path = 'C:\\lstm\\all_ayat.json'
 with open(json_path, 'r') as f:
     all_ayat = json.load(f)
 
 # Load audio list and replace placeholder with actual path
-audio_list_path = 'C:\\kuliah\\lstm\\audio_list.txt'
+audio_list_path = 'C:\\lstm\\audio_list.txt'
 with open(audio_list_path, 'r') as f:
     audio_list = f.read().splitlines()
 audio_list = [path.replace('${DATASET_PATH}', dataset_path) for path in audio_list]
@@ -66,7 +66,7 @@ max_seq_length = max([feature.shape[0] for feature in features])
 padded_features = pad_sequences(features, maxlen=max_seq_length, padding='post', dtype='float32')
 
 # Normalize features
-padded_features = (padded_features - np.mean(padded_features, axis=0)) \\ np.std(padded_features)
+padded_features = (padded_features - np.mean(padded_features, axis=0)) / np.std(padded_features, axis=0)
 
 # Encode labels as integers
 label_encoder = LabelEncoder()
@@ -122,7 +122,7 @@ def preprocess_audio_input(audio_path):
     return mfccs_processed
 
 # Contoh memproses audio input
-audio_input_path = 'C:\\kuliah\\lstm\\audio\\1.wav'
+audio_input_path = 'C:\\lstm\\audio\\1.wav'
 processed_audio_input = preprocess_audio_input(audio_input_path)
 processed_audio_input = np.expand_dims(processed_audio_input, axis=0)  # Menambahkan dimensi batch
 
